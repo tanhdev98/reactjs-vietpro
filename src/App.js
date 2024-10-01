@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
+import ProductItem from "./shared/product-item";
 
 const App = () => {
   return (
@@ -33,8 +34,8 @@ const App = () => {
 
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/category" element={<Category />} />
-                  <Route path="/product-detail" element={<ProductDetail />} />
+                  <Route path="/category-:id" element={<Category />} />
+                  <Route path="/product-detail-:id" element={<ProductDetail />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/success" element={<Success />} />

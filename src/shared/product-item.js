@@ -6,8 +6,8 @@ const ProductItem = ({ item }) => {
     const price = new Intl.NumberFormat('vi-VN', string).format(string);
     return (
         <div className="product-item card text-center">
-            <Link><img src={getImageProduct(item.image)} /></Link>
-            <h4><Link>{item.name}</Link></h4>
+            <Link to={`/product-detail-${item._id}`}><img src={getImageProduct(item.image)} /></Link>
+            <h4><Link to={`/product-detail-${item._id}`}>{item.name}</Link></h4>
             <p>Giá Bán: <span>{price}đ</span></p>
         </div>
     )
