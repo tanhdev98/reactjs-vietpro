@@ -7,15 +7,11 @@ import { formatPrice, formatText, getImageProduct } from '../../ultils';
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]);
-    const [isStock, setIsStock] = useState(false);
 
     useEffect(() => {
         const fetchProductDetail = async () => {
             try {
                 const { data } = await getProductDetail(id);
-                if (data.data.is_stock) {
-                    setIsStock(true);
-                }
                 const formattedPrice = formatPrice(data.data.price);
                 const formattedDetails = formatText(data.data.details);
 
@@ -30,26 +26,28 @@ const ProductDetail = () => {
         <div id="product">
             <div id="product-head" className="row">
                 <div id="product-img" className="col-lg-6 col-md-6 col-sm-12">
-                    <img src={getImageProduct(product.image)} />
+                    <img src={getImageProduct(product?.image)} />
                 </div>
                 <div id="product-details" className="col-lg-6 col-md-6 col-sm-12">
-                    <h1>{product.name}</h1>
+                    <h1>{product?.name}</h1>
                     <ul>
                         <li><span>Bảo hành:</span> 12 Tháng</li>
-                        <li><span>Đi kèm:</span> {product.accessories}</li>
-                        <li><span>Tình trạng:</span> {product.status}</li>
-                        <li><span>Khuyến Mại:</span> {product.promotion}</li>
+                        <li><span>Đi kèm:</span> {product?.accessories}</li>
+                        <li><span>Tình trạng:</span> {product?.status}</li>
+                        <li><span>Khuyến Mại:</span> {product?.promotion}</li>
                         <li id="price">Giá Bán (chưa bao gồm VAT)</li>
-                        <li id="price-number">{product.price}đ</li>
-                        <li id="status">{isStock ? 'Còn hàng' : 'Hết hàng'}</li>
+                        <li id="price-number">{product?.price}đ</li>
+                        <li id="status" className={product?.is_stock ? '' : 'text-danger'} >{product?.is_stock ? 'Còn hàng' : 'Hết hàng'}</li>
                     </ul>
-                    <div id="add-cart"><a href="#">Mua ngay</a></div>
+                    {product?.is_stock && (
+                        <div id="add-cart"><a href="#">Mua ngay</a></div>
+                    )}
                 </div>
             </div>
             <div id="product-body" className="row">
                 <div className="col-lg-12 col-md-12 col-sm-12">
-                    <h3>Đánh giá về {product.name}</h3>
-                    {product.details}
+                    <h3>Đánh giá về {product?.name}</h3>
+                    {product?.details}
                 </div>
             </div>
             {/*	Comment	*/}

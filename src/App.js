@@ -11,7 +11,6 @@ import Search from "./pages/Search";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
-import ProductItem from "./shared/product-item";
 
 const App = () => {
   return (

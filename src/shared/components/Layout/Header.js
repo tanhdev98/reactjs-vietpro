@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Search from "./Search";
 
 const Header = () => {
     return (
@@ -8,12 +9,7 @@ const Header = () => {
                     <div id="logo" className="col-lg-3 col-md-12 col-sm-12">
                         <h1><Link to="/"><img className="img-fluid" src="images/logo.png" /></Link></h1>
                     </div>
-                    <div id="search" className="col-lg-4 col-md-12 col-sm-12">
-                        <form className="form-inline">
-                            <input className="form-control mt-3" type="search" placeholder="Tìm kiếm" aria-label="Search" />
-                            <button className="btn btn-danger mt-3" type="submit">Tìm kiếm</button>
-                        </form>
-                    </div>
+                    <Search />
                     <div id="cart" className="col-lg-5 col-md-12 col-sm-12">
                         <i className="fa-solid fa-user mr-1" />
                         <a className="mr-2" href="#">đăng nhập</a>|
