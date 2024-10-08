@@ -1,12 +1,34 @@
 import { useEffect, useState } from 'react';
 import './product.css'
 import { useParams } from 'react-router-dom';
-import { getProductDetail } from '../../services/Api';
+import { createCommentProduct, getCommentProduct, getProductDetail } from '../../services/Api';
 import { formatPrice, formatText, getImageProduct } from '../../ultils';
+import moment from 'moment';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]);
+    const [comments, setComments] = useState([]);
+    const [inputComment, setInputComment] = useState({});
+
+    const getComment = (id) => {
+        getCommentProduct(id).then(({ data }) => {
+            setComments(data.data.docs);
+        }).catch(error => console.log(error));
+    }
+
+    const inputChange = (e) => {
+        const { name, value } = e.target;
+        setInputComment({ ...inputComment, [name]: value });
+    }
+
+    const handleSubmitComment = (e) => {
+        e.preventDefault();
+        createCommentProduct(id, inputComment).then(({ data }) => {
+            if (data.status === 'success') setInputComment({});
+            getComment(id);
+        }).catch(error => console.log(error));
+    }
 
     useEffect(() => {
         const fetchProductDetail = async () => {
@@ -21,7 +43,10 @@ const ProductDetail = () => {
             }
         };
         fetchProductDetail();
-    }, [id])
+
+        getComment(id);
+    }, [id]);
+
     return (<>
         <div id="product">
             <div id="product-head" className="row">
@@ -57,71 +82,44 @@ const ProductDetail = () => {
                     <form method="post">
                         <div className="form-group">
                             <label>Tên:</label>
-                            <input name="comm_name" required type="text" className="form-control" />
+                            <input onChange={inputChange} value={inputComment.name || ""} name="name" required type="text" className="form-control" />
                         </div>
                         <div className="form-group">
                             <label>Email:</label>
-                            <input name="comm_mail" required type="email" className="form-control" id="pwd" />
+                            <input onChange={inputChange} value={inputComment.email || ""} name="email" required type="email" className="form-control" id="pwd" />
                         </div>
                         <div className="form-group">
                             <label>Nội dung:</label>
-                            <textarea name="comm_details" required rows={8} className="form-control" defaultValue={""} />
+                            <textarea onChange={inputChange} value={inputComment.content || ""} name="content" required rows={8} className="form-control" defaultValue={""} />
                         </div>
-                        <button type="submit" name="sbm" className="btn btn-primary">Gửi</button>
+                        <button onClick={handleSubmitComment} type="submit" name="sbm" className="btn btn-primary">Gửi</button>
                     </form>
                 </div>
             </div>
             {/*	End Comment	*/}
             {/*	Comments List	*/}
-            <div id="comments-list" className="row">
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                    <div className="comment-item">
-                        <ul>
-                            <li><b>Nguyễn Văn A</b></li>
-                            <li>2018-01-03 20:40:10</li>
-                            <li>
-                                <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                            </li>
-                        </ul>
+            {comments?.length && (
+                <div id="comments-list" className="row">
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                        {
+                            comments?.map((commnet, index) => {
+                                const time = moment(commnet?.createdAt).format("MMMM Do YYYY, h:mm:ss a");
+                                return (
+                                    <div className="comment-item" key={index}>
+                                        <ul>
+                                            <li><b>{commnet?.name}</b></li>
+                                            <li>{time}</li>
+                                            <li>
+                                                <p>{commnet?.content}</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
-                    <div className="comment-item">
-                        <ul>
-                            <li><b>Nguyễn Văn A</b></li>
-                            <li>2018-01-03 20:40:10</li>
-                            <li>
-                                <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="comment-item">
-                        <ul>
-                            <li><b>Nguyễn Văn A</b></li>
-                            <li>2018-01-03 20:40:10</li>
-                            <li>
-                                <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="comment-item">
-                        <ul>
-                            <li><b>Nguyễn Văn A</b></li>
-                            <li>2018-01-03 20:40:10</li>
-                            <li>
-                                <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="comment-item">
-                        <ul>
-                            <li><b>Nguyễn Văn A</b></li>
-                            <li>2018-01-03 20:40:10</li>
-                            <li>
-                                <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                </div>)
+            }
             {/*	End Comments List	*/}
         </div>
         {/*	End Product	*/}

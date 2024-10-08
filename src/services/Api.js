@@ -19,3 +19,11 @@ export const getProductsCategory = (id, config) => {
 export const getProductDetail = (id, config) => {
     return Http.get(`/products/${id}`, config)
 }
+
+export const getCommentProduct = (id, config) => {
+    return Http.get(`/products/${id}/comments`, config);
+}
+
+export const createCommentProduct = (id, data) => {
+    return Http.post(`/products/${id}/comments`, data);
+}
