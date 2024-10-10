@@ -7,7 +7,7 @@ const Pagination = ({ pages }) => {
     const { pathname, search } = useLocation();
 
     const formatUrl = (page) => {
-        return `${pathname}?keyword=${keyword}&page=${page}`
+        return `${pathname}?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
     }
 
     const renderPagesHTML = (delta = 2) => {
