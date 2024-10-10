@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { getImageProduct } from "../ultils";
+import { getImageProduct } from "../../ultils";
 
 const ProductItem = ({ item }) => {
     const string = item.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });

@@ -1,19 +1,29 @@
 import { useEffect, useState } from 'react';
 import './product.css'
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { createCommentProduct, getCommentProduct, getProductDetail } from '../../services/Api';
 import { formatPrice, formatText, getImageProduct } from '../../ultils';
 import moment from 'moment';
+import Pagination from '../../shared/components/Pagination';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]);
     const [comments, setComments] = useState([]);
     const [inputComment, setInputComment] = useState({});
+    const [pages, setPages] = useState({});
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const page = Number(searchParams.get("page")) || 1;
 
     const getComment = (id) => {
-        getCommentProduct(id).then(({ data }) => {
+        getCommentProduct(id, {
+            params: {
+                page
+            }
+        }).then(({ data }) => {
             setComments(data.data.docs);
+            setPages(data.data.pages);
         }).catch(error => console.log(error));
     }
 
@@ -45,7 +55,7 @@ const ProductDetail = () => {
         fetchProductDetail();
 
         getComment(id);
-    }, [id]);
+    }, [id, page]);
 
     return (<>
         <div id="product">
@@ -123,15 +133,7 @@ const ProductDetail = () => {
             {/*	End Comments List	*/}
         </div>
         {/*	End Product	*/}
-        <div id="pagination">
-            <ul className="pagination">
-                <li className="page-item"><a className="page-link" href="#">Trang trước</a></li>
-                <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                <li className="page-item"><a className="page-link" href="#">Trang sau</a></li>
-            </ul>
-        </div>
+        <Pagination pages={pages} />
     </>);
 }
 

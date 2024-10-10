@@ -2,7 +2,7 @@ import "./home.css"
 
 import { useEffect, useState } from "react";
 import { getProduct } from "../../services/Api";
-import ProductItem from "../../shared/product-item";
+import ProductItem from "../../shared/components/product-item";
 
 const Home = () => {
     const [latestProducts, setLatestProducts] = useState([]);
