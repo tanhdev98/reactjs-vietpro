@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import './product.css'
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { createCommentProduct, getCommentProduct, getProductDetail } from '../../services/Api';
 import { formatPrice, formatText, getImageProduct } from '../../ultils';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux-setup/reducers/cart';
 import Pagination from '../../shared/components/Pagination';
 
 const ProductDetail = () => {
@@ -12,6 +14,8 @@ const ProductDetail = () => {
     const [comments, setComments] = useState([]);
     const [inputComment, setInputComment] = useState({});
     const [pages, setPages] = useState({});
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const page = Number(searchParams.get("page")) || 1;
@@ -46,8 +50,9 @@ const ProductDetail = () => {
                 const { data } = await getProductDetail(id);
                 const formattedPrice = formatPrice(data.data.price);
                 const formattedDetails = formatText(data.data.details);
+                const priceNumber = data.data.price;
 
-                setProduct({ ...data.data, price: formattedPrice, details: formattedDetails });
+                setProduct({ ...data.data, price: formattedPrice, details: formattedDetails, priceNumber: priceNumber });
             } catch (error) {
                 console.error(error);
             }
@@ -57,6 +62,18 @@ const ProductDetail = () => {
         getComment(id);
     }, [id, page]);
 
+    const clickAddToCart = (type) => {
+        dispatch(addToCart({
+            _id: id,
+            name: product.name,
+            image: product.image,
+            price: product.priceNumber,
+            qty: 1,
+        }));
+        if (type === 'buy-now') {
+            return navigate("/cart");
+        }
+    }
     return (<>
         <div id="product">
             <div id="product-head" className="row">
@@ -72,10 +89,19 @@ const ProductDetail = () => {
                         <li><span>Khuyến Mại:</span> {product?.promotion}</li>
                         <li id="price">Giá Bán (chưa bao gồm VAT)</li>
                         <li id="price-number">{product?.price}đ</li>
-                        <li id="status" className={product?.is_stock ? '' : 'text-danger'} >{product?.is_stock ? 'Còn hàng' : 'Hết hàng'}</li>
+                        <li id="status" className={product?.is_stock ? '' : 'text-danger'} >{product.is_stock ? 'Còn hàng' : 'Hết hàng'}</li>
                     </ul>
                     {product?.is_stock && (
-                        <div id="add-cart"><a href="#">Mua ngay</a></div>
+                        <div id="add-cart">
+                            <button className="btn btn-warning mr-2" onClick={() => clickAddToCart("buy-now")}>
+                                Mua ngay
+                            </button>
+
+                            <button className="btn btn-info" onClick={clickAddToCart}>
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+
                     )}
                 </div>
             </div>
@@ -100,7 +126,7 @@ const ProductDetail = () => {
                         </div>
                         <div className="form-group">
                             <label>Nội dung:</label>
-                            <textarea onChange={inputChange} value={inputComment.content || ""} name="content" required rows={8} className="form-control" defaultValue={""} />
+                            <textarea onChange={inputChange} value={inputComment.content || ""} name="content" required rows={8} className="form-control" />
                         </div>
                         <button onClick={handleSubmitComment} type="submit" name="sbm" className="btn btn-primary">Gửi</button>
                     </form>

@@ -1,6 +1,34 @@
+import { useDispatch, useSelector } from 'react-redux';
 import './cart.css'
+import { getImageProduct } from '../../ultils';
+import { updateCart, deleteItemCart } from '../../redux-setup/reducers/cart';
 
 const Cart = () => {
+    const items = useSelector((({ Cart }) => Cart.items));
+    const dispatch = useDispatch();
+    const changeQty = (e, id) => {
+        const value = Number(e.target.value);
+        if (value === 0) {
+            const isConfirm = window.confirm("Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?");
+            return isConfirm ? dispatch(deleteItemCart({
+                _id: id
+            })) : false;
+        }
+
+        dispatch(updateCart({
+            _id: id,
+            qty: value,
+        }));
+    }
+
+    const handleDeleteItem = (e, id) => {
+        e.preventDefault();
+        const isConfirm = window.confirm("Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?");
+        return isConfirm ? dispatch(deleteItemCart({
+            _id: id
+        })) : false;
+    }
+
     return (<>
         <div id="my-cart">
             <div className="row">
@@ -9,60 +37,30 @@ const Cart = () => {
                 <div className="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>
             </div>
             <form method="post">
-                <div className="cart-item row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <img src="images/product-1.png" />
-                        <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                    </div>
-                    <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" className="form-control form-blue quantity" defaultValue={1} min={1} />
-                    </div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a></div>
-                </div>
-                <div className="cart-item row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <img src="images/product-2.png" />
-                        <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                    </div>
-                    <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" className="form-control form-blue quantity" defaultValue={1} min={1} />
-                    </div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a></div>
-                </div>
-                <div className="cart-item row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <img src="images/product-3.png" />
-                        <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                    </div>
-                    <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" className="form-control form-blue quantity" defaultValue={1} min={1} />
-                    </div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a></div>
-                </div>
-                <div className="cart-item row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <img src="images/product-4.png" />
-                        <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                    </div>
-                    <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" className="form-control form-blue quantity" defaultValue={1} min={1} />
-                    </div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a></div>
-                </div>
-                <div className="cart-item row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <img src="images/product-5.png" />
-                        <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                    </div>
-                    <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" className="form-control form-blue quantity" defaultValue={1} min={1} />
-                    </div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a></div>
-                </div>
+                {
+                    items?.map((item, index) => (
+                        <div className="cart-item row" key={index}>
+                            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
+                                <img src={getImageProduct(item?.image)} />
+                                <h4>{item?.name}</h4>
+                            </div>
+                            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
+                                <input onChange={(e) => changeQty(e, item?._id)} type="number" id="quantity" className="form-control form-blue quantity" value={item?.qty} />
+                            </div>
+                            <div className="cart-price col-lg-3 col-md-3 col-sm-12">
+                                <b>{item?.qty * item?.price}đ</b>
+                                <a onClick={(e) => handleDeleteItem(e, item?._id)}>Xóa</a>
+                            </div>
+                        </div>
+                    ))
+                }
+
                 <div className="row">
-                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12" />
+                    <div className="cart-thumb col-lg-7 col-md-7 col-sm-12"></div>
                     <div className="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>88.970.000đ</b></div>
+                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>{
+                        items?.reduce((total, item) => total + item.qty * item.price, 0)
+                    }đ</b></div>
                 </div>
             </form>
         </div>

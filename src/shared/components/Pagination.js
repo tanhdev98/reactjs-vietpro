@@ -14,7 +14,6 @@ const Pagination = ({ pages }) => {
         const listPage = [];
         const left = currentPage - delta;
         const right = currentPage + delta;
-        console.log(currentPage);
         for (let i = 1; i <= totalPages; i++) {
             if (i === 1 ||
                 i === currentPage ||
