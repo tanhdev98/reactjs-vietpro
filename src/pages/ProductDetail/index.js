@@ -88,7 +88,7 @@ const ProductDetail = () => {
                         <li><span>Tình trạng:</span> {product?.status}</li>
                         <li><span>Khuyến Mại:</span> {product?.promotion}</li>
                         <li id="price">Giá Bán (chưa bao gồm VAT)</li>
-                        <li id="price-number">{product?.price}đ</li>
+                        <li id="price-number">{product?.price}</li>
                         <li id="status" className={product?.is_stock ? '' : 'text-danger'} >{product.is_stock ? 'Còn hàng' : 'Hết hàng'}</li>
                     </ul>
                     {product?.is_stock && (

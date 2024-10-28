@@ -5,9 +5,7 @@ export const getImageProduct = (imageName) => {
 }
 
 export const formatPrice = (number) => {
-    const string = number.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
-    const price = new Intl.NumberFormat('vi-VN', string).format(string);
-    return price;
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
 }
 
 export const formatText = (text) => {

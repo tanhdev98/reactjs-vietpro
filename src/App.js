@@ -12,45 +12,48 @@ import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import NotFound from "./pages/NotFound";
 import { Provider } from "react-redux";
-import store from "./redux-setup/store";
+import store, { persistor } from "./redux-setup/store";
+import { PersistGate } from 'redux-persist/integration/react'
 
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <div>
-          {/*	Header	*/}
-          <Header />
-          {/*	End Header	*/}
-          {/*	Body	*/}
-          <div id="body">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <Menu />
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <div>
+            {/*	Header	*/}
+            <Header />
+            {/*	End Header	*/}
+            {/*	Body	*/}
+            <div id="body">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <Menu />
+                  </div>
                 </div>
-              </div>
-              <div className="row">
-                <div id="main" className="col-lg-8 col-md-12 col-sm-12">
-                  <Slider />
+                <div className="row">
+                  <div id="main" className="col-lg-8 col-md-12 col-sm-12">
+                    <Slider />
 
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/category-:id" element={<Category />} />
-                    <Route path="/product-detail-:id" element={<ProductDetail />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/success" element={<Success />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/category-:id" element={<Category />} />
+                      <Route path="/product-detail-:id" element={<ProductDetail />} />
+                      <Route path="/search" element={<Search />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/success" element={<Success />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </div>
+                  <Sidebar />
                 </div>
-                <Sidebar />
               </div>
             </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   );
 };

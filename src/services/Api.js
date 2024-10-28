@@ -27,3 +27,7 @@ export const getCommentProduct = (id, config) => {
 export const createCommentProduct = (id, data) => {
     return Http.post(`/products/${id}/comments`, data);
 }
+
+export const createOrder = (data) => {
+    return Http.post(`/order`, data);
+}
