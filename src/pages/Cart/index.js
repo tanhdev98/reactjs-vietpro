@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './cart.css'
-import { formatPrice, getImageProduct } from '../../ultils';
+import { formatPrice, getImage } from '../../ultils';
 import { updateCart, deleteItemCart, resetCart } from '../../redux-setup/reducers/cart';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -64,7 +64,7 @@ const Cart = () => {
                     items?.map((item, index) => (
                         <div className="cart-item row" key={index}>
                             <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src={getImageProduct(item?.image)} alt={item?.name} />
+                                <img src={getImage("producs", item?.image)} alt={item?.name} />
                                 <h4>{item?.name}</h4>
                             </div>
                             <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">

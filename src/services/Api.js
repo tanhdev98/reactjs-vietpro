@@ -31,3 +31,23 @@ export const createCommentProduct = (id, data) => {
 export const createOrder = (data) => {
     return Http.post(`/order`, data);
 }
+
+export const getSliders = (config) => {
+    return Http.get(`/sliders`, config);
+}
+
+export const getBanners = (config) => {
+    return Http.get(`/banners`, config);
+}
+
+export const createRegister = (data) => {
+    return Http.post(`/customers/register`, data);
+}
+
+export const createLogin = (data) => {
+    return Http.post(`/customers/login`, data);
+}
+
+export const updateCustomer = (id, data) => {
+    return Http.post(`/customers/${id}/update`, data);
+}

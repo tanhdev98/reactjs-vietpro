@@ -14,6 +14,9 @@ import NotFound from "./pages/NotFound";
 import { Provider } from "react-redux";
 import store, { persistor } from "./redux-setup/store";
 import { PersistGate } from 'redux-persist/integration/react'
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import Customer from "./pages/Customer";
 
 const App = () => {
   return (
@@ -43,6 +46,9 @@ const App = () => {
                       <Route path="/search" element={<Search />} />
                       <Route path="/cart" element={<Cart />} />
                       <Route path="/success" element={<Success />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/customer" element={<Customer />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </div>

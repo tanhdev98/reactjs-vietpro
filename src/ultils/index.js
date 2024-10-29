@@ -1,7 +1,7 @@
 import { BASE_URL } from "../shared/constants/app";
 
-export const getImageProduct = (imageName) => {
-    return `${BASE_URL}/assets/uploads/products/${imageName}`;
+export const getImage = (folderName, imageName) => {
+    return `${BASE_URL}/assets/uploads/${folderName}/${imageName}`;
 }
 
 export const formatPrice = (number) => {

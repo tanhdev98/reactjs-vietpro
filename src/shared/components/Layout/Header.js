@@ -1,9 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../redux-setup/reducers/auth";
 
 const Header = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const totalCart = useSelector(({ Cart }) => Cart.items.reduce((total, item) => total + item.qty, 0));
+    const { accessToken, customer } = useSelector((state) => state.Auth);
+
+    const clickLogout = () => {
+        dispatch(logout());
+        navigate('/login');
+    }
     return (
         <div id="header">
             <div className="container">
@@ -14,8 +23,18 @@ const Header = () => {
                     <Search />
                     <div id="cart" className="col-lg-5 col-md-12 col-sm-12">
                         <i className="fa-solid fa-user mr-1" />
-                        <a className="mr-2" href="#">đăng nhập</a>|
-                        <a className="mr-2 ml-2" href="#">đăng ký</a>|
+                        {
+                            customer ?
+                                (<>
+                                    <Link className="mr-2" to="/customer">{customer?.email}</Link>|
+                                    <Link className="mr-2 ml-2" onClick={clickLogout}>đăng xuất</Link>|
+                                </>) :
+                                (<>
+                                    <Link className="mr-2" to="/login">đăng nhập</Link>|
+                                    <Link className="mr-2 ml-2" to="/register">đăng ký</Link>|
+                                </>)
+                        }
+
                         <a className="mt-4 mr-2 ml-2">giỏ hàng
                             <ul>
                                 <li><Link to="/cart"><i className="fas fa-shopping-cart" /> Giỏ hàng của bạn</Link></li>

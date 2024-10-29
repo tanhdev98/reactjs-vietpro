@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './product.css'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { createCommentProduct, getCommentProduct, getProductDetail } from '../../services/Api';
-import { formatPrice, formatText, getImageProduct } from '../../ultils';
+import { formatPrice, formatText, getImage } from '../../ultils';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux-setup/reducers/cart';
@@ -78,7 +78,7 @@ const ProductDetail = () => {
         <div id="product">
             <div id="product-head" className="row">
                 <div id="product-img" className="col-lg-6 col-md-6 col-sm-12">
-                    <img src={getImageProduct(product?.image)} />
+                    <img src={getImage("products", product?.image)} />
                 </div>
                 <div id="product-details" className="col-lg-6 col-md-6 col-sm-12">
                     <h1>{product?.name}</h1>
