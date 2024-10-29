@@ -139,7 +139,7 @@ const ProductDetail = () => {
                     <div className="col-lg-12 col-md-12 col-sm-12">
                         {
                             comments?.map((commnet, index) => {
-                                const time = moment(commnet?.createdAt).format("MMMM Do YYYY, h:mm:ss a");
+                                const time = moment(commnet?.createdAt).format("MMMM DD YYYY, h:mm:ss a");
                                 return (
                                     <div className="comment-item" key={index}>
                                         <ul>

@@ -18,8 +18,8 @@ const authReducer = createSlice({
             state.customer = null;
         },
         updateCustomerInfo: (state, action) => {
-            state.customer = action.payload.customer;
-        }
+            state.customer = { ...state.customer, ...action.payload };
+        },
     }
 })
 

@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../redux-setup/reducers/auth";
+import { loginSuccess, logout } from "../../../redux-setup/reducers/auth";
+import { useEffect } from "react";
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Header = () => {
                     <div id="cart" className="col-lg-5 col-md-12 col-sm-12">
                         <i className="fa-solid fa-user mr-1" />
                         {
-                            customer ?
+                            accessToken ?
                                 (<>
                                     <Link className="mr-2" to="/customer">{customer?.email}</Link>|
                                     <Link className="mr-2 ml-2" onClick={clickLogout}>đăng xuất</Link>|
@@ -38,7 +39,7 @@ const Header = () => {
                         <a className="mt-4 mr-2 ml-2">giỏ hàng
                             <ul>
                                 <li><Link to="/cart"><i className="fas fa-shopping-cart" /> Giỏ hàng của bạn</Link></li>
-                                <li><Link to="#"><i className="fas fa-file-alt" /> Đơn hàng đã mua</Link></li>
+                                <li><Link to="/order"><i className="fas fa-file-alt" /> Đơn hàng đã mua</Link></li>
                             </ul>
                         </a>
                         <span className="mt-3">{totalCart}</span>

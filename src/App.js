@@ -17,6 +17,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Customer from "./pages/Customer";
+import Order from "./pages/Order";
+import OrderDetail from "./pages/OrderDetail";
 
 const App = () => {
   return (
@@ -49,6 +51,8 @@ const App = () => {
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/customer" element={<Customer />} />
+                      <Route path="/order" element={<Order />} />
+                      <Route path="/order-detail-:id" element={<OrderDetail />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </div>

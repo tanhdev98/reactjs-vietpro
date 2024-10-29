@@ -7,9 +7,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { createOrder } from '../../services/Api';
 
 const Cart = () => {
-    const [inputCustomer, setInputCustomer] = useState({});
+    const { accessToken, customer } = useSelector((state) => state.Auth);
+
+    const [inputCustomer, setInputCustomer] = useState({
+        fullName: customer?.fullName || "",
+        phone: customer?.phone || "",
+        email: customer?.email || "",
+        address: customer?.address || "",
+    });
+
     const items = useSelector((({ Cart }) => Cart.items));
     const newItems = items.map((item) => ({ prd_id: item._id, price: item.price, qty: item.qty }));
+
+    const totalPrice = items.reduce((total, item) => total + item.qty * item.price, 0);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const changeQty = (e, id) => {
@@ -44,7 +55,8 @@ const Cart = () => {
         e.preventDefault();
         createOrder({
             ...inputCustomer,
-            customer_id: "614717de271a0400ee8ef1cd",
+            customer_id: customer._id,
+            totalPreice: totalPrice,
             items: newItems,
         }).then(() => {
             dispatch(resetCart());
@@ -64,7 +76,7 @@ const Cart = () => {
                     items?.map((item, index) => (
                         <div className="cart-item row" key={index}>
                             <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src={getImage("producs", item?.image)} alt={item?.name} />
+                                <img src={getImage("products", item?.image)} alt={item?.name} />
                                 <h4>{item?.name}</h4>
                             </div>
                             <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
@@ -81,38 +93,42 @@ const Cart = () => {
                 <div className="row">
                     <div className="cart-thumb col-lg-7 col-md-7 col-sm-12"></div>
                     <div className="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div>
-                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>{
-                        formatPrice(items?.reduce((total, item) => total + item.qty * item.price, 0))
-                    }</b></div>
+                    <div className="cart-price col-lg-3 col-md-3 col-sm-12"><b>{formatPrice(totalPrice)}</b></div>
                 </div>
             </form>
         </div>
         <div id="customer">
-            <form method="post">
-                <div className="row">
-                    <div id="customer-name" className="col-lg-4 col-md-4 col-sm-12">
-                        <input onChange={changeInputCustomer} placeholder="Họ và tên (bắt buộc)" type="text" name="fullName" className="form-control" required />
+            {accessToken && (
+                <form method="post">
+                    <div className="row">
+                        <div id="customer-name" className="col-lg-4 col-md-4 col-sm-12">
+                            <input onChange={changeInputCustomer} defaultValue={inputCustomer?.fullName} placeholder="Họ và tên (bắt buộc)" type="text" name="fullName" className="form-control" required />
+                        </div>
+                        <div id="customer-phone" className="col-lg-4 col-md-4 col-sm-12">
+                            <input onChange={changeInputCustomer} defaultValue={inputCustomer?.phone} placeholder="Số điện thoại (bắt buộc)" type="text" name="phone" className="form-control" required />
+                        </div>
+                        <div id="customer-mail" className="col-lg-4 col-md-4 col-sm-12">
+                            <input onChange={changeInputCustomer} defaultValue={inputCustomer?.email} placeholder="Email (bắt buộc)" type="text" name="email" className="form-control" required />
+                        </div>
+                        <div id="customer-add" className="col-lg-12 col-md-12 col-sm-12">
+                            <input onChange={changeInputCustomer} defaultValue={inputCustomer?.address} placeholder="Địa chỉ nhà riêng hoặc cơ quan (bắt buộc)" type="text" name="address" className="form-control" required />
+                        </div>
                     </div>
-                    <div id="customer-phone" className="col-lg-4 col-md-4 col-sm-12">
-                        <input onChange={changeInputCustomer} placeholder="Số điện thoại (bắt buộc)" type="text" name="phone" className="form-control" required />
-                    </div>
-                    <div id="customer-mail" className="col-lg-4 col-md-4 col-sm-12">
-                        <input onChange={changeInputCustomer} placeholder="Email (bắt buộc)" type="text" name="email" className="form-control" required />
-                    </div>
-                    <div id="customer-add" className="col-lg-12 col-md-12 col-sm-12">
-                        <input onChange={changeInputCustomer} placeholder="Địa chỉ nhà riêng hoặc cơ quan (bắt buộc)" type="text" name="address" className="form-control" required />
-                    </div>
-                </div>
-            </form>
+                </form>
+            )}
+
             <div className="row">
                 <div className="by-now col-lg-6 col-md-6 col-sm-12">
-                    <Link onClick={clickOrder} href="#">
+                    {accessToken ? (<Link onClick={clickOrder}>
                         <b>Mua ngay</b>
                         <span>Giao hàng tận nơi siêu tốc</span>
-                    </Link>
+                    </Link>) : <Link to="/login">
+                        <b>Đăng nhập</b>
+                        <span>Đăng nhập để mua hàng</span>
+                    </Link>}
                 </div>
                 <div className="by-now col-lg-6 col-md-6 col-sm-12">
-                    <Link href="#">
+                    <Link to="#">
                         <b>Trả góp Online</b>
                         <span>Vui lòng call (+84) 0988 550 553</span>
                     </Link>

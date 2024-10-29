@@ -51,3 +51,11 @@ export const createLogin = (data) => {
 export const updateCustomer = (id, data) => {
     return Http.post(`/customers/${id}/update`, data);
 }
+
+export const getOrders = (id) => {
+    return Http.get(`/customers/${id}/orders`);
+}
+
+export const getCancelOrder = (id) => {
+    return Http.get(`/customer/orders/${id}/canceled`);
+}
