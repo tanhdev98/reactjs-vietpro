@@ -4,6 +4,7 @@ import './order.css'
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { formatPrice } from '../../ultils';
+import { Link } from 'react-router-dom';
 
 const Order = () => {
     const { customer } = useSelector((state) => state.Auth);
@@ -36,7 +37,7 @@ const Order = () => {
             <form method="post">
                 {
                     orders?.map((order, index) => {
-                        const date = moment(order.createdAt).format("MMMM DD YYYY");
+                        const date = moment(order.createdAt).format("DD MMMM YYYY");
                         const time = moment(order.createdAt).format("h:mm:ss a");
                         return (
                             <div className={`cart-item row ${order.status === 0 ? "alert-danger" : order.status === 2 ? "alert-success" : ""}`} key={index}>
@@ -46,7 +47,7 @@ const Order = () => {
                                 </div>
                                 <div className="cart-price col-lg-2 col-md-2 col-sm-12"><b>{formatPrice(order.totalPrice)}</b></div>
                                 <div className="cart-quantity col-lg-3 col-md-3 col-sm-12">
-                                    <button type="button" className="btn btn-outline-dark mb-1">Chi tiết đơn hàng</button>
+                                    <Link to={`/order-detail-${order._id}`} type="button" className="btn btn-outline-dark mb-1" >Chi tiết đơn hàng</Link>
                                     {order.status === 0 && (
                                         <button type="button" className="btn btn-danger mb-1">Đơn đã huỷ</button>
                                     )}
@@ -70,8 +71,8 @@ const Order = () => {
 
                 <div className="row">
                     <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                        <button id="update-cart" className="btn btn-success" type="submit" name="sbm">Quay về
-                            trang chủ</button>
+                        <Link to={"/"} id="update-cart" className="btn btn-success" type="submit" name="sbm">Quay về
+                            trang chủ</Link>
                     </div>
                     <div className="col-lg-5 col-md-5 col-sm-12">
                         <ul className="pagination mt-4">

@@ -59,3 +59,7 @@ export const getOrders = (id) => {
 export const getCancelOrder = (id) => {
     return Http.get(`/customer/orders/${id}/canceled`);
 }
+
+export const getOrderDetail = (id) => {
+    return Http.get(`/customer/orders/${id}`);
+}
