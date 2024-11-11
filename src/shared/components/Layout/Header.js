@@ -1,8 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess, logout } from "../../../redux-setup/reducers/auth";
-import { useEffect } from "react";
+import { logout } from "../../../redux-setup/reducers/auth";
 
 const Header = () => {
     const dispatch = useDispatch();
